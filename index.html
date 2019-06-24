@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>无噪音</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <style>
+        * {
+            touch-action: pan-y;
+        }
+        .card:nth-of-type(1) .card-content-inner {
+            background: url("images/zybg.jpg") no-repeat 0 50%;
+            background-position:center center
+        }
+        .card:nth-of-type(2) .card-content-inner {
+            background: url("images/lsjlbg.jpg") no-repeat 0 50%;
+            background-position:center center
+        }
+        .card:nth-of-type(3) .card-content-inner {
+            background: url("images/fbbg.jpg") no-repeat 0 50%;
+            background-position:center center
+        }
+        .card a {
+            background: #fff;
+        }
+        .card-content-inner {
+            height: 6rem;
+        }
+        .tab-item span {
+            display: block;
+        }
+        .tab-item span:nth-child(1) {
+            padding-top: 0.5rem
+        }
+        .tab-item span:nth-child(2) {
+            font-size: x-small
+        }
+        #status{
+            color: #f00;
+        }
+        .infinite-scroll-preloader {
+            margin-top:-20px;
+        }
+    </style>
+</head>
+<body>
+<div class="page-group">
+    <div class="page" id="main">
+        <header class="bar bar-nav">
+            <h1 class="title">无噪音</h1>
+        </header>
+        <nav class="bar bar-tab">
+            <a class="tab-item active" href="#">
+                <span class="fa fa-volume-up fa-1x"></span>
+                <span class="tab-label">噪音监测</span>
+            </a>
+            <a class="tab-item" href="#">
+                <span class="fa fa-moon-o"></span>
+                <span class="tab-label">睡眠质量监测</span>
+            </a>
+            <a class="tab-item" href="#">
+                <span  class="fa fa-cog"></span>
+                <span class="tab-label">设置</span>
+            </a>
+        </nav>
+        <div class="content">
+            <div class="page-index">
+                <div class="card"><a href="#soundtest">
+                    <div  valign="bottom" class="card-header color-white no-border">实时噪音监测</div>
+                    <div class="card-content">
+                        <div class="card-content-inner">
+                        </div>
+                    </div>
+                    </a>
+                </div>
+                <div class="card"><a href="#history">
+                    <div valign="bottom" class="card-header color-white no-border">历史记录</div>
+                    <div class="card-content">
+                        <div class="card-content-inner">
+                        </div>
+                    </div>
+                 </a>
+                </div>
+                <div class="card"><a href="#soundmap">
+                    <div valign="bottom" class="card-header color-white no-border">噪音分布</div>
+                    <div class="card-content">
+                        <div class="card-content-inner">
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--声音监测开始-->
+    <div class="page" id="soundtest">
+        <header class="bar bar-nav">
+            <a class="button button-link button-nav pull-left back" href="#main">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <h1 class='title'>实时噪音监测</h1>
+        </header>
+        <div class="content">
+            <div class="content-block">
+                <div class="content">
+                    <div class="content-block-title">监测值（峰值、平均值、实时值）</div>
+                    <div class="list-block">
+                        <ul>
+                            <li><a href="#" class="item-link list-button">平均分贝：<span id="avestatus">0</span></a></li>
+                            <li><a href="#" class="item-link list-button">最高分贝：<span id="maxstatus">0</span></a></li>
+                            <li><a href="#" class="item-link list-button">实时分贝：<span id="status">0</span></a></li>
+                        </ul>
+                    </div>
+                    <div class="content-block-title">实时监测图</div>
+                    <div class="list-block inset soundcanvas">
+                        <div id="SCanvas"  style="border:1px solid #000000;height: 10rem;width: 100%;overflow-scrolling: auto"></div>
+                    </div>
+                    <div class="content-block-title">开始/暂停</div>
+                    <div class="content-block">
+                        <div class="row">
+                            <div class="col-50"><a href="#" class="button button-big button-fill button-success" onclick=beginDetect();beginmap()>开始</a></div>
+                            <div class="col-50"><a href="#" data-popup=".popup-about" class="button button-big button-fill button-danger open-popup">结束</a></div>
+                        </div>
+                    </div>
+                    <div class="content-block-title">注意！请开启您麦克风的权限</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--声音监测结束-->
+    <!--历史记录开始-->
+    <div class="page" id="history">
+        <header class="bar bar-nav">
+            <a class="button button-link button-nav pull-left back" href="#main">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <h1 class='title'>历史记录</h1>
+        </header>
+        <div class="bar bar-header-secondary">
+            <div class="searchbar">
+                <a class="searchbar-cancel">取消</a>
+                <div class="search-input">
+                    <label class="icon icon-search" for="search"></label>
+                    <input type="search" id='search' placeholder='输入关键字...'/>
+                </div>
+            </div>
+        </div>
+        <div class="content">
+                    <div class="list-block">
+                        <div class="content-block-title">2019-06-03 11:05:41</div>
+                        <div class="list-block">
+                            <ul>
+                                <li class="item-content">
+                                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                                    <div class="item-inner">
+                                        <div class="item-title">平均值</div>
+                                        <div class="item-after">20</div>
+                                    </div>
+                                </li>
+                                <li class="item-content">
+                                    <div class="item-media"><i class="icon icon-f7"></i></div>
+                                    <div class="item-inner">
+                                        <div class="item-title">最高值</div>
+                                        <div class="item-after">87</div>
+                                    </div>
+                                </li>
+                            </ul>
+                    </div>
+                    <!-- 加载提示符 -->
+                    <div class="infinite-scroll-preloader">
+                        <div class="preloader"></div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!--历史记录结束-->
+    <!--soundmap开始-->
+    <div class="page" id="soundmap">
+        <header class="bar bar-nav">
+            <a class="button button-link button-nav pull-left back" href="#main">
+                <span class="icon icon-left"></span>
+                返回
+            </a>
+            <h1 class='title'>噪音分布</h1>
+        </header>
+        <div class="content">
+            <div class="content-block">
+            </div>
+        </div>
+    </div>
+    <!--soundmap结束-->
+    <!--popup开始-->
+    <div class="popup popup-about">
+        <div class="content-block">
+            <p><a  href="#" class="close-popup">返回</a></p>
+            <div class="list-block" style="margin: 0 auto;text-align: center">
+                <h1>测试结束</h1>
+                <ul>
+                    <li><a href="#" class="item-link list-button">最高分贝：<span id="result1">0</span></a></li>
+                    <li><a href="#" class="item-link list-button">平均分贝：<span id="result2">0</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--popup结束-->
+</div>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='js/jquery-1.11.3.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='js/jquery.cookie.js' charset='utf-8'></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+<script src="http://api.map.baidu.com/api?v=2.0&ak=aPsokgDa0hO8KaPT21FYcGZrgcx8GCZG" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+<script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+<script>
+    function beginDetect() {
+        let mystatus = document.getElementById('status');
+        let maxstatus = document.getElementById('maxstatus');
+        let avestatus = document.getElementById('avestatus');
+        let audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let mediaStreamSource = null;
+        let scriptProcessor = null;
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // 获取用户的 media 信息
+            navigator.mediaDevices.getUserMedia({audio: true}).then((stream) => {
+                // 将麦克风的声音输入这个对象
+                mediaStreamSource = audioContext.createMediaStreamSource(stream);
+                // 创建一个音频分析对象，采样的缓冲区大小为4096，输入和输出都是单声道
+                scriptProcessor = audioContext.createScriptProcessor(4096,1,1);
+                // 将该分析对象与麦克风音频进行连接
+                mediaStreamSource.connect(scriptProcessor);
+                // 此举无甚效果，仅仅是因为解决 Chrome 自身的 bug
+                scriptProcessor.connect(audioContext.destination);
+                // 开始处理音频
+                scriptProcessor.onaudioprocess = function(e) {
+                    // 获得缓冲区的输入音频，转换为包含了PCM通道数据的32位浮点数组
+                    let buffer = e.inputBuffer.getChannelData(0);
+                    // 获取缓冲区中最大的音量值
+                    let maxVal = Math.max.apply(Math, buffer);
+                    // 显示音量值
+                    mystatus.innerHTML =Math.round(maxVal * 100);
+
+                };
+                let max = 0;
+                let avearray= [];
+                let t1 = setInterval( () => {
+                    if(parseInt(mystatus.innerHTML) > parseInt(max)){
+                        /*console.log('max:'+max+'myst:'+mystatus.innerHTML+'maxst:'+maxstatus.innerHTML);*/
+                        max = mystatus.innerHTML;
+                        maxstatus.innerHTML = max;
+                    }
+                    avearray.push(parseInt(mystatus.innerHTML));
+                    let sum = 0;
+                    for (var i = 0; i < avearray.length; i++) {
+                        sum += avearray[i];
+                    }
+                    avestatus.innerHTML =  parseInt(sum/avearray.length);
+                },100);
+                document.getElementsByClassName('button-danger')[0].onclick=(() => {
+                   /* alert('ok');*/
+                    max = 0;
+                    avearray = [];
+                    const tracks = stream.getTracks()[0];
+                    tracks.stop();
+                    /*document.getElementById("SCanvas").innerHTML = '';*/
+                    clearInterval(t1);
+                    document.getElementById('result1').innerHTML = parseInt(document.getElementById('maxstatus').innerHTML);
+                    document.getElementById('result2').innerHTML = parseInt(document.getElementById('avestatus').innerHTML);
+                });
+            }).catch((error) => {
+                mystatus.innerHTML = '获取音频时好像出了点问题。' + error
+            });
+        } else {
+            mystatus.innerHTML = '不支持获取媒体接口'
+        }
+    }
+    function beginmap() {
+        var dom = document.getElementById("SCanvas");
+        var myChart = echarts.init(dom);
+        var app = {};
+        option = null;
+        function randomData() {
+            var sounddata = parseInt(document.getElementById("status").innerHTML);
+            now = now + 1;
+            return {
+                name: now.toString(),
+                value: [
+                    now,
+                    sounddata
+                ]
+            }
+        }
+        var data = [];
+        var now = +0;
+        for (var i = 0; i < 7; i++) {
+            data.push(randomData());
+        }
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                formatter: function (params) {
+                    params = params[0];
+                    var date = new Date(params.name);
+                    return params.value[1];
+                },
+                axisPointer: {
+                    animation: false
+                }
+            },
+            xAxis: {
+                type: 'value',
+            },
+            yAxis: {
+                type: 'value',
+            },
+            series: [{
+                name: '模拟数据',
+                type: 'line',
+                showSymbol: false,
+                hoverAnimation: false,
+                //stack: '总量',
+                data: data
+            }]
+        };
+        let t2 = setInterval(function () {
+            for (var i = 0; i < 1; i++) {
+                data.shift();
+                data.push(randomData());
+            }
+            myChart.setOption({
+                series: [{
+                    name: '模拟数据',
+                    type: 'line',
+                    showSymbol: false,
+                    hoverAnimation: false,
+                    //stack: '总量',
+                    data: data
+                }]
+            });
+            myChart.setOption({
+                xAxis: [{
+                    type: 'value',
+                    splitLine: {
+                        show: false
+                    },
+                    min: +data[0].name,
+                }]
+            });
+        }, 100);
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    }
+    $(function () {
+        $('.tab-item:eq(2)').click(function () {
+            window.location.href = "setting.html";
+        });
+        $('.tab-item:eq(1)').click(function () {
+            window.location.href = "sleep.html";
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    $(document).on('click','.popup-about', function () {
+        console.log('opened');
+    });
+    $(document).on('click','.popup-about', function () {
+        console.log('closing');
+        /*setTimeout(function () {
+            location.reload();
+        },300);*/
+    });
+
+</script>
+</body>
+</html>

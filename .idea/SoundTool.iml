@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="WEB_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/.tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/temp" />
+      <excludeFolder url="file://$MODULE_DIR$/tmp" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="zepto" level="application" />
+    <orderEntry type="library" name="sm" level="application" />
+    <orderEntry type="library" name="sm-extend" level="application" />
+    <orderEntry type="library" name="echarts" level="application" />
+    <orderEntry type="library" name="echarts-gl" level="application" />
+    <orderEntry type="library" name="ecStat" level="application" />
+    <orderEntry type="library" name="dataTool" level="application" />
+    <orderEntry type="library" name="china" level="application" />
+    <orderEntry type="library" name="world" level="application" />
+    <orderEntry type="library" name="bmap" level="application" />
+    <orderEntry type="library" name="simplex" level="application" />
+  </component>
+</module>

@@ -1,0 +1,160 @@
+<<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>无噪音</title>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <style>
+        .tab-item span {
+            display: block;
+        }
+        .tab-item span:nth-child(1) {
+            padding-top: 0.5rem
+        }
+        .tab-item span:nth-child(2) {
+            font-size: x-small
+        }
+    </style>
+</head>
+<body>
+<div class="page-group">
+    <div class="page" id="main">
+        <header class="bar bar-nav">
+            <h1 class="title">无噪音</h1>
+        </header>
+        <nav class="bar bar-tab">
+            <a class="tab-item" href="#">
+                <span class="fa fa-volume-up fa-1x"></span>
+                <span class="tab-label">噪音监测</span>
+            </a>
+            <a class="tab-item" href="#">
+                <span class="fa fa-moon-o"></span>
+                <span class="tab-label">睡眠质量监测</span>
+            </a>
+            <a class="tab-item active" href="#">
+                <span  class="fa fa-cog"></span>
+                <span class="tab-label">设置</span>
+            </a>
+        </nav>
+        <header class="bar bar-nav">
+            <h1 class="title">设置</h1>
+        </header>
+        <div class="content">
+            <div class="content-block-title">用户信息</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content">
+                        <div class="item-inner">
+                            <div class="item-title">
+                                <img src="images/zybg.jpg" style="height: 5rem;width: 5rem; border-radius:50%;margin: 1rem 1rem">
+                            </div>
+                            <div class="item-after">
+                                <p id="Usertext"></p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title" >ID</div>
+                            <div class="item-after" id="IDtext"></div>
+                        </div>
+                    </li>
+                    <li class="item-content">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                            <div class="item-inner">
+                                <div class="item-inner">
+                                    <div class="item-title">夜间模式</div>
+                                    <div class="item-after">
+                                        <label class="label-switch">
+                                            <input type="checkbox">
+                                            <div class="checkbox"></div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="content-block-title">设置</div>
+            <div class="list-block">
+                <ul>
+                    <li class="item-content item-link">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">修改用户名密码</div>
+                        </div>
+                    </li>
+                    <li class="item-content item-link">
+                        <div class="item-media"><i class="icon icon-f7"></i></div>
+                        <div class="item-inner">
+                            <div class="item-title">清除历史记录</div>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="content-block">
+                <div class="list-block">
+                    <ul>
+                        <li class="item-content" style="background: red;">
+                            <div class="item-inner" >
+                                <div id="quit" class="item-title" style="text-align: center;margin:0 auto;color: white;">退出</div>
+                            </div>
+                        </li>
+                        <li class="item-content" style="background: green;">
+                            <div class="item-inner" >
+                                <div id="login" class="item-title" style="text-align: center;margin:0 auto;color: white;">登录</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='js/jquery-1.11.3.min.js' charset='utf-8'></script>
+<script type='text/javascript' src='js/jquery.cookie.js' charset='utf-8'></script>
+<script type="text/javascript">
+    $(function () {
+        if($.cookie('id')){
+            $('.item-content:eq(6)').hide();
+            $('#Usertext').html($.cookie('user'));
+            $('#IDtext').html($.cookie('id'));
+        }else{
+            $('.item-content:eq(0),.item-content:eq(1),.item-content:eq(2),.item-content:eq(3),.item-content:eq(4),.item-content:eq(5),.content-block-title').hide();
+        }
+        $('.tab-item:eq(0)').click(function () {
+            window.location.href = "index.html";
+        });
+        $('.tab-item:eq(1)').click(function () {
+            window.location.href = "sleep.html";
+        });
+        $('#quit').parent().click(function () {
+            $('.item-content:eq(0),.item-content:eq(1),.item-content:eq(2),.item-content:eq(3),.item-content:eq(4),.item-content:eq(5),.content-block-title').hide(500);
+            $('.item-content:eq(6)').show(500);
+            $.cookie('name', '', { expires: -1 });
+            $.cookie('id', '', { expires: -1 });
+        });
+        $('.item-content:eq(6)').click(function () {
+            $('.item-content:eq(0),.item-content:eq(1),.item-content:eq(2),.item-content:eq(3),.item-content:eq(4),.item-content:eq(5),.content-block-title').show(500);
+            $('.item-content:eq(6)').hide(500);
+            //登录信息
+            $.cookie('user','USER', { expires: 7 });
+            $.cookie('id','000000001', { expires: 7 });
+            //读取
+        });
+    })
+</script>
+</body>
+</html>
